@@ -62,6 +62,29 @@ const loadCategoryVidoes = async(id) => {
   }
 }
 
+const loadDetails = async(videoId) => {
+      console.log(videoId);
+      const url = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
+      const res = await fetch(url);
+      const data = await res.json()
+      console.log(data);
+      displayDetails(data.video);
+}
+
+const displayDetails = (video) => {
+    console.log(video);
+    const detailContainer  = document.getElementById("modal-content");
+    detailContainer.innerHTML = `
+    <img src=${video.thumbnail}/>
+    <p>${video.description}</p>
+    `
+
+    // way 1:
+    // document.getElementById("showModalData").click();
+    // way 2:
+    document.getElementById("customModal").showModal();
+}
+
 const cardDemo = {
       "category_id": "1001",
       "video_id": "aaaa",
@@ -103,7 +126,7 @@ const displayVideos = (videoss) => {
   }
 
   videoss.forEach( video => {
-    console.error(video);
+    // console.error(video);
     const card = document.createElement("div");
     card.classList = "card card-compact rounded-lg";
     card.innerHTML = 
@@ -126,7 +149,7 @@ const displayVideos = (videoss) => {
             <p class="text-gray-400">${video.authors[0].profile_name}</p>
             ${video.authors[0].verified ? `<img class="w-5 h-5" src="https://img.icons8.com/?size=96&id=D9RtvkuOe31p&format=png"/>` : ""}
         </div>
-        <p></p>
+        <p><button onclick="loadDetails('${video.video_id}')" class="btn btn-sm btn-error">details</button></p>
     </div>
   </div>
     `;
