@@ -35,6 +35,18 @@ const loadVideos = async() => {
   }
 }
 
+const loadCategoryVidoes = async(id) => {
+  // alert(id);
+  try {
+    const res = await fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+    const data = await res.json()
+    displayVideos(data.category)
+  }
+  catch(error) {
+    console.error('Error fetching data;', error);
+  }
+}
+
 const cardDemo = {
       "category_id": "1001",
       "video_id": "aaaa",
@@ -56,6 +68,7 @@ const cardDemo = {
 
 const displayVideos = (videoss) => {
   const videoContainer = document.getElementById('videos');
+  videoContainer.innerHTML = "";
   videoss.forEach( video => {
     console.error(video);
     const card = document.createElement("div");
@@ -67,7 +80,7 @@ const displayVideos = (videoss) => {
       src=${video.thumbnail}
       class="h-full w-full object-cover"
       alt="Shoes" />
-      ${video.others.posted_date?.length == 0? "" : `<span class="absolute right-2 bottom-2 bg-black rounded p-1 text-white">${getTimeString(video.others.posted_date)}</span>`}
+      ${video.others.posted_date?.length == 0? "" : `<span class="absolute right-2 bottom-2 text-xs bg-black rounded p-1 text-white">${getTimeString(video.others.posted_date)}</span>`}
       
   </figure>
   <div class="px-0 py-2 flex gap-2">
@@ -101,12 +114,17 @@ const displayCategories = (categories) => {
   categories.forEach( (item) => {
     console.log(item)
     // create button
-    const button = document.createElement("button");
-    button.classList = "btn";
-    button.innerText = item.category;
+    const buttonContainer = document.createElement("div");
+    buttonContainer.innerHTML = 
+    `
+    <button onclick="loadCategoryVidoes(${item.category_id})" class="btn">
+    ${item.category}
+    </button>
+    `
+    
 
     // add the button to the category container
-    categoryContainer.append(button);
+    categoryContainer.append(buttonContainer);
   })
 }
 
